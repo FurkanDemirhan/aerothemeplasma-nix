@@ -7,13 +7,13 @@ kdePackages.libplasma.overrideAttrs (oldAttrs: {
   patches = [
     # "Apply ATP patches to libplasma"
     (fetchpatch {
-      url = "https://gitgud.io/aeroshell/libplasma/-/commit/3b0709a266625c00d3e7d09d4eeecb9ff52e4d41.patch";
-      hash = "sha256-faf2gyd7y6uA/oAV/+IMOfYbNOO9wmvh9IyTItYFTyE=";
+      url = "https://github.com/aeroshell-desktop/libplasma/commit/3b0709a266625c00d3e7d09d4eeecb9ff52e4d41.patch";
+      hash = "sha256-XULB9ogLDtuxhGFrXGDyrKxFlKz+jUyKLq1MunlKG3A=";
     })
     # "Remove assertion failure on empty dialogs"
     (fetchpatch {
-      url = "https://gitgud.io/aeroshell/libplasma/-/commit/a4e0bcc9e01434e5680070197e0e217ba50699c8.patch";
-      hash = "sha256-wPpWVZOB4AAuLY+/IuU8JzUmRpzpLW8+sysy8ExAqfg=";
+      url = "https://github.com/aeroshell-desktop/libplasma/commit/a4e0bcc9e01434e5680070197e0e217ba50699c8.patch";
+      hash = "sha256-RHxueHNBzsNgN5popiBpHa2BVMdRjO5WLPFJubmUL6I=";
     })
   ];
   postPatch = ''
