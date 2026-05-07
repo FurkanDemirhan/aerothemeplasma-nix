@@ -13,7 +13,7 @@ kdePackages.libplasma.overrideAttrs (oldAttrs: {
     # "Remove assertion failure on empty dialogs"
     (fetchpatch {
       url = "https://github.com/aeroshell-desktop/libplasma/commit/a4e0bcc9e01434e5680070197e0e217ba50699c8.patch";
-      hash = "sha256-RHxueHNBzsNgN5popiBpHa2BVMdRjO5WLPFJubmUL6I=";
+      hash = "sha256-wPpWVZOB4AAuLY+/IuU8JzUmRpzpLW8+sysy8ExAqfg=";
     })
   ];
   postPatch = ''
