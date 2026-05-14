@@ -4,19 +4,12 @@ This [flake](https://wiki.nixos.org/wiki/Flakes) can be used to install the Wayl
 ![Demo of AeroThemePlasma on a running NixOS system](demo.png)
 
 ## Installation
-### Fonts (optional)
-Certain fonts are required to build the [Plymouth](https://www.freedesktop.org/wiki/Software/Plymouth)-based boot animation. If you want it, please open `C:\Windows\Fonts` on an [up-to-date](https://github.com/nyakase/aerothemeplasma-nix/issues/15#issuecomment-3941785456) Windows 7 install and copy over these files:
-
-* Segoe UI: segoeui.ttf (336200), segoeuib.ttf (336200), segoeuii.ttf (336200), seguisb.ttf (327680)
-* Lucida Console: lucon.ttf (327680)
-
-To check font versions, use `fc-query -f "%{fontversion}" FILE.ttf`. Add files to the Nix store with `nix store add-file FILE.ttf`.
 
 ### Modules
 Add aerothemeplasma-nix as a flake input and NixOS module. 
 
 <details>
-<summary>Example</summary>
+<summary>Example flake.nix</summary>
 
 ```nix
 # ./flake.nix
@@ -44,28 +37,32 @@ Add aerothemeplasma-nix as a flake input and NixOS module.
 </details>
 
 ### Configuration
-To install the theme, add this to your NixOS configuration. You can omit the options that are not "required" if unwanted. "Font files needed" means you need to follow [the "Fonts" section](#fonts-optional) if using those options.
+To install the theme, add this to your NixOS configuration:
 
 ```nix
-# ./configuration.nix
 boot.plymouth.enable = true;
 services.displayManager.sddm.enable = true;
-services.desktopManager.plasma6.enable = true; # required
+services.desktopManager.plasma6.enable = true;
 services.displayManager.defaultSession = "aerothemeplasma";
 
 programs.aeroshell = {
-  enable = true; # required
-  fonts.enable = true; # font files needed
+  enable = true;
+  fonts.segoe.enable = true; # required for plymouth
   polkit.enable = true;
   aerothemeplasma = {
-    enable = true; # required
+    enable = true;
     sddm.enable = true;
-    plymouth.enable = true; # font files needed
+    plymouth.enable = true;
   };
 };
 ```
 
-### Use it
+#### Lucida Console font
+You can enable this font with `programs.aeroshell.fonts.lucida.enable = true;`. It's used in the password screen for the Plymouth theme, though [NixOS doesn't support it by default](https://github.com/NixOS/nixpkgs/issues/26722#issuecomment-1707084031). To actually install the font, you must obtain it from a copy of Windows 7 yourself.
+
+Grab it from `C:\Windows\Fonts\lucon.ttf`. Its version should be 327680, which you can check with `fc-query -f "%{fontversion}" lucon.ttf`. Then add it to your Nix store with `nix store add-file lucon.ttf`.
+
+### Go to town
 Rebuild and reboot your system. You can open the session list with the bottom-left button if using the SDDM theme. Select the "AeroThemePlasma (Wayland)" session if not pre-selected.
 
 When booting into the session for the first time, a setup wizard will launch and help you finish applying the Plasma theme. Have fun!
@@ -99,4 +96,4 @@ I can't call them frequently asked questions when I haven't been asked them a si
 * Chris Lejman of [brokenTONE](https://brokentone.net) for creating the ["Not so ordinary life"](https://brokentone.net/wall/147-not-so-ordinary-life/) wallpaper, used in the demo screenshot
 
 ### [It's fun to stay at the](https://music.youtube.com/watch?v=RN8Li7kYNnw&t=57) C.E.L.A.
-THIS PROJECT IS IN NO WAY AFFILIATED WITH THE MICROSOFT GROUP OF COMPANIES. Windows® and Segoe® are registered trademarks of the Microsoft Corporation in the United States. This project does not aim to, and does not, distribute copies of the Microsoft Corporation's famous Windows® 7 operating system and associated fonts.
+THIS PROJECT IS IN NO WAY AFFILIATED WITH THE MICROSOFT GROUP OF COMPANIES. Windows® and Segoe® are registered trademarks of the Microsoft Corporation in the United States. This project does not aim to, and does not, distribute copies of the Microsoft Corporation's famous Windows® 7 operating system and associated fonts. The version of Segoe® used in the [`segoe-ui`](pkgs/external/fonts/segoe-ui.nix) package is retrieved from [a Microsoft repository under the MIT license](https://github.com/microsoft/MixedReality-AzureCommunicationServices-Sample/blob/0be22d2d10aa8172053206fa3d3a29799817313a/LICENSE).

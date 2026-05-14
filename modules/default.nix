@@ -22,6 +22,8 @@ in
     aeroshell = {
       enable = lib.mkEnableOption "AeroShell, a set of core components for AeroThemePlasma";
       fonts.enable = lib.mkEnableOption "the Segoe UI and Lucida Console fonts";
+      fonts.segoe.enable = lib.mkEnableOption "the Segoe UI font";
+      fonts.lucida.enable = lib.mkEnableOption "the Lucida Console font";
       polkit.enable = lib.mkEnableOption "the AeroShell Polkit agent replacement";
       aerothemeplasma = {
         enable = lib.mkEnableOption "AeroThemePlasma, a set of Plasma theme packages";
@@ -37,8 +39,11 @@ in
   config = lib.mkIf (config.aerothemeplasma.enable || cfg.enable) {
     assertions = [
       {
-        assertion = cfg.aerothemeplasma.plymouth.enable -> cfg.fonts.enable;
-        message = "The Plymouth theme requires AeroShell fonts to be enabled.";
+        assertion = cfg.aerothemeplasma.plymouth.enable -> cfg.fonts.segoe.enable;
+        message = ''
+          The Plymouth theme requires the Segoe font to be enabled.
+          Like so: "programs.aeroshell.fonts.segoe.enable = true;"
+        '';
       }
       {
         assertion = !config.aerothemeplasma.enable;
@@ -86,9 +91,15 @@ in
     ]) ++ lib.optionals config.programs.linver.enable [ atpkgs.linver ]
        ++ lib.optionals config.programs.execbin.enable [ atpkgs.execbin ];
 
-    fonts.packages = with atpkgs; lib.mkIf cfg.fonts.enable [ 
-      segoe-ui lucida-console 
-    ];
+    # backward compat for users of "programs.aeroshell.fonts.enable"
+    programs.aeroshell.fonts = lib.mkIf cfg.fonts.enable {
+      segoe.enable = lib.mkDefault true;
+      lucida.enable = lib.mkDefault true;
+    };
+
+    fonts.packages = lib.optionals cfg.fonts.segoe.enable [ atpkgs.segoe-ui ] 
+      ++ lib.optionals cfg.fonts.lucida.enable [ atpkgs.lucida-console ];
+    
     systemd.packages = with atpkgs; lib.optionals cfg.polkit.enable [
       uac-polkit-agent
     ];
@@ -105,7 +116,7 @@ in
         Theme = {
           CursorTheme = "aero-drop";
           CursorSize = 30;
-          Font = lib.mkIf cfg.fonts.enable "Segoe UI";
+          Font = lib.mkIf cfg.fonts.segoe.enable "Segoe UI";
         };
       };
     };

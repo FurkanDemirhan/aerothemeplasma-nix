@@ -1,25 +1,23 @@
 {
   stdenvNoCC,
-  requireFile
+  fetchurl,
+  lib
 }:
 let
-  requireFont = name: hash: requireFile {
-    inherit name hash;
-    message = ''
-      Please grab C:\Windows\Fonts\${name} from an up-to-date install of Windows 7.
-      You will likely need to grab more. See https://github.com/nyakase/aerothemeplasma-nix.
-      Once you have the file, run "nix store add-file ${name}", then try again.'';
+  fetchFont = name: hash: fetchurl {
+    inherit hash;
+    url = "https://media.githubusercontent.com/media/microsoft/MixedReality-AzureCommunicationServices-Sample/0be22d2d10aa8172053206fa3d3a29799817313a/unity/acsShowcase/Assets/Resources/Fonts/Segue%20UI/${name}";
   };
 in
 stdenvNoCC.mkDerivation {
   pname = "segoe-ui";
-  version = "5.13";
+  version = "5.05";
 
   srcs = [
-    (requireFont "segoeui.ttf" "sha256-D3hVlE5czKjkDOkKzkBiYkhTq2SE3bZfRDfM9w/tQq0=")
-    (requireFont "segoeuib.ttf" "sha256-3phVBDDi4XqDmdsJTxqAl0OhN8y6OJsPC1YGFHPSmtQ=")
-    (requireFont "seguisb.ttf" "sha256-e2H8pj2ibkVERAL0LOBospJE2dPTUehnlt98oKlN9jw=")
-    (requireFont "segoeuii.ttf" "sha256-LwAe+oiW8eOK/rpZ7i/6H3clt4qbJ5wftRqI0mj2URA=")
+    (fetchFont "SegoeUI.ttf" "sha256-UgTdsxVMCHGkhDOuhezneXwY+HD6WNpD6XHI+T4vu7k=")
+    (fetchFont "SegoeUI-Bold.ttf" "sha256-LMO76M+n10zvV6AZ7dLdqSZ021874s8o+6+1MagAZnQ=")
+    (fetchFont "SegoeUI-SemiBold.ttf" "sha256-qw6wberphuy66f5h7cP7520HNTFq9N3kiK3yfY+l5FM=")
+    (fetchFont "SegoeUI-Italic.ttf" "sha256-0aKKZ4TwaUQ24W2999PjLCLsch845UpLQXdEOqBlwrc=")
   ];
 
   dontUnpack = true;
@@ -29,4 +27,7 @@ stdenvNoCC.mkDerivation {
     ln -st $out/share/fonts/truetype $srcs
     runHook postInstall
   '';
+
+  # https://github.com/microsoft/MixedReality-AzureCommunicationServices-Sample/blob/0be22d2d10aa8172053206fa3d3a29799817313a/LICENSE
+  meta.license = lib.licenses.mit;
 }

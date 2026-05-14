@@ -23,7 +23,7 @@
 
   programs.aeroshell = {
     enable = true;
-    fonts.enable = true;
+    fonts.segoe.enable = true;
     polkit.enable = true;
     aerothemeplasma = {
       enable = true;

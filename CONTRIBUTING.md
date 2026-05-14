@@ -28,9 +28,6 @@ Your NixOS configuration should have these options:
 }
 ```
 
-## Get fonts
-If testing with the Plymouth theme, it needs fonts extracted from an [up-to-date](https://github.com/nyakase/aerothemeplasma-nix/issues/15#issuecomment-3941785456) Windows® 7 install to build. Alternatively, you can disable it in [the VM's configuration](vms/aerothemeplasma.nix) by setting "fonts.enable" and "plymouth.enable" to `false`. See [the README](README.md#fonts-optional) for the expected font files and how to add them to `/nix/store`.
-
 ## Build and run
 The command to run the VM differs depending on the host distro. Run one of these in the project folder:
 ```
