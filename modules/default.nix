@@ -85,10 +85,8 @@ in
       networkmanagement
 
       pkgs.kdePackages.qtstyleplugin-kvantum
-    ]) ++ (with atpkgs; lib.optionals config.programs.sevulet.enable [ 
-      sevulet-explorer sevulet-notepad 
-      sevulet-photoview sevulet-stickies 
-    ]) ++ lib.optionals config.programs.linver.enable [ atpkgs.linver ]
+    ]) ++ lib.optionals cfg.aerothemeplasma.sddm.enable [ atpkgs.sddm-theme-mod ]
+       ++ lib.optionals config.programs.linver.enable [ atpkgs.linver ]
        ++ lib.optionals config.programs.execbin.enable [ atpkgs.execbin ];
 
     # backward compat for users of "programs.aeroshell.fonts.enable"
@@ -110,7 +108,7 @@ in
     };
 
     services.displayManager.sddm = lib.mkIf cfg.aerothemeplasma.sddm.enable {
-      theme = "${atpkgs.sddm-theme-mod}/share/sddm/themes/sddm-theme-mod";
+      theme = "sddm-theme-mod";
       extraPackages = [ pkgs.kdePackages.kitemmodels ];
       settings = {
         Theme = {
