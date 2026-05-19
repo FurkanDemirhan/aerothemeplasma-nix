@@ -67,7 +67,7 @@ in
     environment.systemPackages = with atpkgs; [
       pkgs.kdePackages.qtmultimedia
       libplasma libtaskmanager libshowdesktop
-      plasma-workspace default-rules
+      libaeroshellutils plasma-workspace default-rules
     ] ++ (with atpkgs; lib.optionals cfg.aerothemeplasma.enable [
       cursors icons sounds
 

@@ -53,8 +53,8 @@
               domain = "gitgud.io";
               owner = "aeroshell";
               repo = "aeroshell-workspace";
-              rev = "ceb31c1d4aac43955e0195c627a57bf45f511990";
-              hash = "sha256-nVuO+MioCku/isljfRQgEv2sRclOF/QdPBNPZs6Kd6M=";
+              rev = "12313066fbeafb950ad9ac59d98fa4b16a33c85b";
+              hash = "sha256-JQ7Mx0XL8VnrAxtDaRu46EIXePHNQZy5hNN2GIS4m94=";
             };
             aerothemeplasma-icons-repo = pkgs.fetchFromGitLab {
               domain = "gitgud.io";
@@ -96,6 +96,7 @@
 
             default-rules = self.callPackage ./pkgs/aeroshell/plasma/default-rules.nix {};
             kcmloader = self.callPackage ./pkgs/aeroshell/plasma/kcmloader.nix {};
+            libaeroshellutils = self.callPackage ./pkgs/aeroshell/plasma/libaeroshellutils.nix {};
             libshowdesktop = self.callPackage ./pkgs/aeroshell/plasma/libshowdesktop.nix {};
             libtaskmanager = self.callPackage ./pkgs/aeroshell/plasma/libtaskmanager.nix {};
 
