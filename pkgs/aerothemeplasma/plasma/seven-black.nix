@@ -4,7 +4,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "aerothemeplasma-seven-black";
-  version = "2025-10-23";
+  version = "2026-03-14";
   src = aerothemeplasma-repo;
 
   dontUnpack = true;

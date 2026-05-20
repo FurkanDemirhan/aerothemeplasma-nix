@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation {
   pname = "aerothemeplasma-login-session";
-  version = "2026-02-23";
+  version = "2026-03-14";
   src = aerothemeplasma-repo;
 
   nativeBuildInputs = [ cmake ];
