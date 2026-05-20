@@ -39,8 +39,8 @@
               domain = "gitgud.io";
               owner = "aeroshell";
               repo = "aeroshell-kwin-components";
-              rev = "4a47f711819b4fafe88179b22b32c99ae4e33cdd";
-              hash = "sha256-TOuJ9f7yiNdMaWXv7P1vaSEBhx85v94XZ8ptZzs+ptw=";
+              rev = "b787cfe07b31374ddfd700034f9f7138e51382dc";
+              hash = "sha256-xAj+JphwwabYdrGC9T3DKNanCgGXxAFHVpgfwkkI8UI=";
             };
             aeroshell-smod-repo = pkgs.fetchFromGitLab {
               domain = "gitgud.io";
@@ -83,9 +83,11 @@
 
             aeroglassblur = self.callPackage ./pkgs/aeroshell/kwin/aeroglassblur.nix {};
             aeroglide = self.callPackage ./pkgs/aeroshell/kwin/aeroglide.nix {};
+            default-rules = self.callPackage ./pkgs/aeroshell/kwin/default-rules.nix {};
             dimscreenaero = self.callPackage ./pkgs/aeroshell/kwin/dimscreenaero.nix {};
             fadingpopupsaero = self.callPackage ./pkgs/aeroshell/kwin/fadingpopupsaero.nix {};
             flip3d = self.callPackage ./pkgs/aeroshell/kwin/flip3d.nix {};
+            i18n-kwin = self.callPackage ./pkgs/aeroshell/kwin/i18n.nix {};
             launchfeedback = self.callPackage ./pkgs/aeroshell/kwin/launchfeedback.nix {};
             loginaero = self.callPackage ./pkgs/aeroshell/kwin/loginaero.nix {};
             smod = self.callPackage ./pkgs/aeroshell/kwin/smod.nix {};
@@ -94,7 +96,6 @@
             squashaero = self.callPackage ./pkgs/aeroshell/kwin/squashaero.nix {};
             thumbnail-aero = self.callPackage ./pkgs/aeroshell/kwin/thumbnail-aero.nix {};
 
-            default-rules = self.callPackage ./pkgs/aeroshell/plasma/default-rules.nix {};
             kcmloader = self.callPackage ./pkgs/aeroshell/plasma/kcmloader.nix {};
             libaeroshellutils = self.callPackage ./pkgs/aeroshell/plasma/libaeroshellutils.nix {};
             libshowdesktop = self.callPackage ./pkgs/aeroshell/plasma/libshowdesktop.nix {};

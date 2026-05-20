@@ -81,7 +81,7 @@ in
       digitalclocklite panel thumbnail-aero
       fadingpopupsaero squashaero loginaero
       dimscreenaero launchfeedback smodsnap
-      aeroglide kcmloader battery
+      aeroglide kcmloader battery i18n-kwin
       networkmanagement
 
       pkgs.kdePackages.qtstyleplugin-kvantum

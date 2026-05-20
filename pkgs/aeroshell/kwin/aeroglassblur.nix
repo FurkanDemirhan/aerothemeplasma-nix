@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation {
   pname = "aeroshell-aeroglassblur";
-  version = "2026-02-21";
+  version = "2026-03-23";
   src = aeroshell-kwin-repo;
 
   preConfigure = "cd effects_cpp/wayland/kde-effects-aeroglassblur";
