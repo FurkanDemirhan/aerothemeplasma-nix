@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation {
   pname = "aeroshell-smodglow";
-  version = "2026-02-20";
+  version = "2026-02-26";
   src = aeroshell-smod-repo;
 
   preConfigure = "cd smodglow";
