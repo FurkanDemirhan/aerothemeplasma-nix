@@ -1,5 +1,5 @@
 # AeroThemePlasma on NixOS
-This [flake](https://wiki.nixos.org/wiki/Flakes) can be used to install the Wayland version of [AeroThemePlasma](https://gitgud.io/wackyideas/aerothemeplasma) on a NixOS unstable system.
+This [flake](https://wiki.nixos.org/wiki/Flakes) can be used to install [AeroThemePlasma](https://gitgud.io/wackyideas/aerothemeplasma) on a NixOS unstable system.
 
 ![Demo of AeroThemePlasma on a running NixOS system](demo.png)
 
@@ -37,17 +37,17 @@ Add aerothemeplasma-nix as a flake input and NixOS module.
 </details>
 
 ### Configuration
-To install the theme, add this to your NixOS configuration:
+To install the theme, add this to your NixOS configuration (edge cases are described below):
 
 ```nix
 boot.plymouth.enable = true;
 services.displayManager.sddm.enable = true;
 services.desktopManager.plasma6.enable = true;
-services.displayManager.defaultSession = "aerothemeplasma";
+services.displayManager.defaultSession = "aerothemeplasma"; # for x11, append x11
 
 programs.aeroshell = {
   enable = true;
-  fonts.segoe.enable = true; # required for plymouth
+  fonts.segoe.enable = true;
   polkit.enable = true;
   aerothemeplasma = {
     enable = true;
@@ -57,13 +57,18 @@ programs.aeroshell = {
 };
 ```
 
+#### Disabling sessions
+If you have the X server enabled (`services.xserver.enable = true;`), some effects will compile for both Wayland and X11 by default. If you know you will only use one with the theme, you can save yourself time by disabling the other: `programs.aeroshell.sessions.<wayland/x11>.enable = false;`.
+
+Please remember that [KDE is dropping their X11 session in Plasma 6.8](https://blogs.kde.org/2025/11/26/going-all-in-on-a-wayland-future) which will release [around mid-October 2026](https://community.kde.org/Schedules/Plasma_6#Future_releases), and the AeroShell developers have stated on Discord that they intend to drop all X11 support then.
+
 #### Lucida Console font
-You can enable this font with `programs.aeroshell.fonts.lucida.enable = true;`. It's used in the password screen for the Plymouth theme, though [NixOS doesn't support it by default](https://github.com/NixOS/nixpkgs/issues/26722#issuecomment-1707084031). To actually install the font, you must obtain it from a copy of Windows 7 yourself.
+If you use full disk encryption, Plymouth shows a password screen [(though NixOS doesn't support that by default)](https://github.com/NixOS/nixpkgs/issues/26722#issuecomment-1693500074). The Lucida Console font is used for the screen, which can be enabled with `programs.aeroshell.fonts.lucida.enable = true;` but you must obtain a copy from Windows 7 yourself.
 
 Grab it from `C:\Windows\Fonts\lucon.ttf`. Its version should be 327680, which you can check with `fc-query -f "%{fontversion}" lucon.ttf`. Then add it to your Nix store with `nix store add-file lucon.ttf`.
 
 ### Go to town
-Rebuild and reboot your system. You can open the session list with the bottom-left button if using the SDDM theme. Select the "AeroThemePlasma (Wayland)" session if not pre-selected.
+Rebuild and reboot your system. You can open the session list with the bottom-left button if using the SDDM theme. Select one of the AeroThemePlasma sessions if not pre-selected.
 
 When booting into the session for the first time, a setup wizard will launch and help you finish applying the Plasma theme. Have fun!
 
@@ -76,8 +81,6 @@ Remove the [NixOS module](#modules) and [associated options](#configuration) fro
 Lastly, delete the `~/.config/aerothemeplasmarc` file. Not doing so prevents the setup wizard from launching on reinstallation.
 
 ## Potential questions
-### Why is X11 unsupported?
-[Plasma's X11 session will be dropped in 2027.](https://blogs.kde.org/2025/11/26/going-all-in-on-a-wayland-future/) There are [some minor issues](https://gitgud.io/wackyideas/aerothemeplasma/-/blob/master/DOCUMENTATION.md#current-wayland-issues-) with using AeroThemePlasma on Wayland, but for the most part it works nicely, so I don't want to double the flake surface for something that is going away soon.
 
 ### Why did tooltips break after restarting `plasmashell`?
 Under the AeroThemePlasma session it's called `aeroshell`, so you should restart that instead. If you use `plasmashell`, it will start without the tooltip patch.

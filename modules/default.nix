@@ -3,6 +3,10 @@ perSystem:
 let
   cfg = config.programs.aeroshell;
   atpkgs = perSystem.config.packages;
+  withSessions = list: lib.concatMap (pkg:
+    lib.optional cfg.sessions.wayland.enable (pkg.override { session = "wayland"; })
+    ++ lib.optional cfg.sessions.x11.enable (pkg.override { session = "x11"; })
+  ) list;
 in
 {
   # this is rather silly but if the options are dropped entirely the
@@ -21,10 +25,16 @@ in
   options.programs = {
     aeroshell = {
       enable = lib.mkEnableOption "AeroShell, a set of core components for AeroThemePlasma";
-      fonts.enable = lib.mkEnableOption "the Segoe UI and Lucida Console fonts";
-      fonts.segoe.enable = lib.mkEnableOption "the Segoe UI font";
-      fonts.lucida.enable = lib.mkEnableOption "the Lucida Console font";
       polkit.enable = lib.mkEnableOption "the AeroShell Polkit agent replacement";
+      fonts = {
+        enable = lib.mkEnableOption "the Segoe UI and Lucida Console fonts";
+        segoe.enable = lib.mkEnableOption "the Segoe UI font";
+        lucida.enable = lib.mkEnableOption "the Lucida Console font";
+      };
+      sessions = {
+        wayland.enable = lib.mkEnableOption "the Wayland session" // { default = true; };
+        x11.enable = lib.mkEnableOption "the X11 session" // { default = config.services.xserver.enable; };
+      };
       aerothemeplasma = {
         enable = lib.mkEnableOption "AeroThemePlasma, a set of Plasma theme packages";
         plymouth.enable = lib.mkEnableOption "the PlymouthVista theme using the 7 style";
@@ -61,35 +71,48 @@ in
           Please remove the "programs.sevulet.enable = true;" option from your configuration.
         '';
       }
+      {
+        assertion = cfg.sessions.wayland.enable || cfg.sessions.x11.enable;
+        message = ''
+          Both sessions under programs.aeroshell.sessions are disabled. How did that happen?
+          Please enable one like so: programs.aeroshell.sessions.<wayland/x11>.enable = true;
+        '';
+      }
+      {
+        assertion = cfg.sessions.x11.enable -> config.services.xserver.enable;
+        message = ''
+          The X11 session requires the X server to be enabled.
+          Enable it like so: "services.xserver.enable = true;"
+        '';
+      }
     ];
 
-    services.displayManager.sessionPackages = lib.mkIf cfg.aerothemeplasma.enable [ atpkgs.login-session ];
+    services.displayManager.sessionPackages = lib.mkIf cfg.aerothemeplasma.enable (withSessions [ atpkgs.login-session ]);
+    
     environment.systemPackages = with atpkgs; [
-      pkgs.kdePackages.qtmultimedia
+      pkgs.kdePackages.qtmultimedia kcmloader
       libplasma libtaskmanager libshowdesktop
-      plasma-workspace default-rules
+      libaeroshellutils plasma-workspace default-rules
     ] ++ (with atpkgs; lib.optionals cfg.aerothemeplasma.enable [
       cursors icons sounds
 
       atpootb authui7 color-scheme kvantum-windows7aero
-      layout-template seven-black
+      layout-template seven-black shell
 
-      keyboardlayout win7showdesktop
-      seventasks sevenstart aeroglassblur
-      shell smod smodglow desktopcontainment
-      systemtray notifications volume flip3d
-      digitalclocklite panel thumbnail-aero
-      fadingpopupsaero squashaero loginaero
-      dimscreenaero launchfeedback smodsnap
-      aeroglide kcmloader battery
-      networkmanagement
+      battery desktopcontainment digitalclocklite keyboardlayout
+      networkmanagement notifications panel sevenstart seventasks
+      systemtray volume win7showdesktop
+
+      dimscreenaero fadingpopupsaero flip3d i18n-kwin loginaero smod 
+      smodpeekeffect smodpeekscript squashaero thumbnail-aero thumbnails
 
       pkgs.kdePackages.qtstyleplugin-kvantum
-    ]) ++ (with atpkgs; lib.optionals config.programs.sevulet.enable [ 
-      sevulet-explorer sevulet-notepad 
-      sevulet-photoview sevulet-stickies 
-    ]) ++ lib.optionals config.programs.linver.enable [ atpkgs.linver ]
-       ++ lib.optionals config.programs.execbin.enable [ atpkgs.execbin ];
+    ] ++ withSessions (with atpkgs; [
+      aeroglassblur aeroglide launchfeedback smodglow smodsnap 
+    ])) 
+      ++ lib.optionals cfg.aerothemeplasma.sddm.enable [ atpkgs.sddm-theme-mod ]
+      ++ lib.optionals config.programs.linver.enable [ atpkgs.linver ]
+      ++ lib.optionals config.programs.execbin.enable [ atpkgs.execbin ];
 
     # backward compat for users of "programs.aeroshell.fonts.enable"
     programs.aeroshell.fonts = lib.mkIf cfg.fonts.enable {
@@ -110,7 +133,7 @@ in
     };
 
     services.displayManager.sddm = lib.mkIf cfg.aerothemeplasma.sddm.enable {
-      theme = "${atpkgs.sddm-theme-mod}/share/sddm/themes/sddm-theme-mod";
+      theme = "sddm-theme-mod";
       extraPackages = [ pkgs.kdePackages.kitemmodels ];
       settings = {
         Theme = {

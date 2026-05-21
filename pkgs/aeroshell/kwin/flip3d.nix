@@ -4,7 +4,7 @@
 }:
 stdenvNoCC.mkDerivation {
   pname = "aeroshell-flip3d";
-  version = "2026-02-21";
+  version = "2026-03-03";
   src = aeroshell-kwin-repo;
 
   dontUnpack = true;

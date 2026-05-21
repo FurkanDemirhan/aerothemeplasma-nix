@@ -1,14 +1,20 @@
 {
   stdenv,
   pkgs,
-  aeroshell-uac-repo,
+  fetchFromGitLab,
   cmake,
   kdePackages,
 }:
 stdenv.mkDerivation {
-  pname = "aeroshell-uac-polkit-agent";
-  src = aeroshell-uac-repo;
-  version = "2026-02-25";
+  pname = "uac-polkit-agent";
+  src = fetchFromGitLab {
+    domain = "gitgud.io";
+    owner = "aeroshell";
+    repo = "uac-polkit-agent";
+    rev = "e2f42e6ada98bbcd944b83f2575c0a62ea766b71";
+    hash = "sha256-rrUkI6fbG4HywPPS1u4PBGyveT9ylWJPv/9n5G8FlzM=";
+  };
+  version = "2026-04-07";
 
   buildInputs = with kdePackages; [
     qtbase

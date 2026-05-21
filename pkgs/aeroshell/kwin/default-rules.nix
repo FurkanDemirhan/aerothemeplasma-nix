@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   
   buildInputs = with kdePackages; [ 
     extra-cmake-modules qtdeclarative 
-    qttools kconfig
+    qttools kconfig ki18n
   ];
   nativeBuildInputs = [ cmake kdePackages.wrapQtAppsHook ];
   cmakeFlags = [ "-DKWIN_INSTALL_MISC=false" ];
