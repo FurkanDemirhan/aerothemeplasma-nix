@@ -86,8 +86,11 @@
             smod = self.callPackage ./pkgs/aeroshell/kwin/smod.nix {};
             smodglow = self.callPackage ./pkgs/aeroshell/kwin/smodglow.nix {};
             smodsnap = self.callPackage ./pkgs/aeroshell/kwin/smodsnap.nix {};
+            smodpeekeffect = self.callPackage ./pkgs/aeroshell/kwin/smodpeekeffect.nix {};
+            smodpeekscript = self.callPackage ./pkgs/aeroshell/kwin/smodpeekscript.nix {};
             squashaero = self.callPackage ./pkgs/aeroshell/kwin/squashaero.nix {};
             thumbnail-aero = self.callPackage ./pkgs/aeroshell/kwin/thumbnail-aero.nix {};
+            thumbnails = self.callPackage ./pkgs/aeroshell/kwin/thumbnails.nix {};
 
             kcmloader = self.callPackage ./pkgs/aeroshell/plasma/kcmloader.nix {};
             libaeroshellutils = self.callPackage ./pkgs/aeroshell/plasma/libaeroshellutils.nix {};
