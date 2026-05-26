@@ -24,7 +24,7 @@ in
   
   options.programs = {
     aeroshell = {
-      enable = lib.mkEnableOption "AeroShell, a set of core components for AeroThemePlasma";
+      enable = lib.mkEnableOption "AeroShell";
       polkit.enable = lib.mkEnableOption "the AeroShell Polkit agent replacement";
       fonts = {
         enable = lib.mkEnableOption "the Segoe UI and Lucida Console fonts";
@@ -90,10 +90,15 @@ in
     services.displayManager.sessionPackages = lib.mkIf cfg.aerothemeplasma.enable (withSessions [ atpkgs.login-session ]);
     
     environment.systemPackages = with atpkgs; [
-      pkgs.kdePackages.qtmultimedia kcmloader
-      libplasma libtaskmanager libshowdesktop
-      libaeroshellutils plasma-workspace default-rules
-    ] ++ (with atpkgs; lib.optionals cfg.aerothemeplasma.enable [
+      pkgs.kdePackages.qtmultimedia libplasma plasma-workspace
+
+      dimscreenaero fadingpopupsaero flip3d i18n-kwin loginaero smod 
+      smodpeekeffect smodpeekscript squashaero thumbnail-aero thumbnails
+
+      kcmloader libaeroshellutils libshowdesktop libtaskmanager
+    ] ++ withSessions (with atpkgs; [
+      aeroglassblur aeroglide launchfeedback smodglow smodsnap
+    ]) ++ (with atpkgs; lib.optionals cfg.aerothemeplasma.enable [
       cursors icons sounds
 
       atpootb authui7 color-scheme kvantum-windows7aero
@@ -103,13 +108,8 @@ in
       networkmanagement notifications panel sevenstart seventasks
       systemtray volume win7showdesktop
 
-      dimscreenaero fadingpopupsaero flip3d i18n-kwin loginaero smod 
-      smodpeekeffect smodpeekscript squashaero thumbnail-aero thumbnails
-
       pkgs.kdePackages.qtstyleplugin-kvantum
-    ] ++ withSessions (with atpkgs; [
-      aeroglassblur aeroglide launchfeedback smodglow smodsnap 
-    ])) 
+    ]) 
       ++ lib.optionals cfg.aerothemeplasma.sddm.enable [ atpkgs.sddm-theme-mod ]
       ++ lib.optionals config.programs.linver.enable [ atpkgs.linver ]
       ++ lib.optionals config.programs.execbin.enable [ atpkgs.execbin ];
