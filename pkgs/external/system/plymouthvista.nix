@@ -3,9 +3,23 @@
   fetchFromGitHub,
   imagemagick,
   segoe-ui,
-  lucida-console,
-  makeFontsConf
+  makeFontsConf,
+  settings ? {},
+  lib
 }:
+let
+  pvizeAttrs = attrs: lib.mapAttrs (name: value: 
+    if (lib.isString value) then value
+    else if (lib.isInt value) then (lib.toString value)
+    else if (lib.isBool value) then (if value then "1" else "0") 
+    # https://github.com/NixOS/nixpkgs/blob/56c315f08829fa61c48320e4e4371ef4177d1e5a/lib/types.nix#L891
+    else throw "plymouthvista: setting `${name}' is not of type `string or boolean or signed integer'."
+  ) attrs;
+
+  mkPvConfs = attrs: lib.concatMapAttrsStringSep "\n" (name: value:
+    "./pv_conf.sh -s ${lib.escapeShellArg name} -v ${lib.escapeShellArg value}"
+  ) (pvizeAttrs attrs);
+in 
 stdenvNoCC.mkDerivation {
   pname = "plymouthvista";
   version = "2026-02-22";
@@ -30,15 +44,7 @@ stdenvNoCC.mkDerivation {
     patchShebangs ./compile.sh ./pv_conf.sh ./gen_blur.sh
 
     ./compile.sh
-
-    # Apply the setting swaps that install.sh does when activating
-    # Windows 7 mode. Ideally I would allow the consumer to change
-    # the config themselves, but it's unclear to me how I would do
-    # so right now, since the config is baked in at build time.
-    ./pv_conf.sh -s UseLegacyBootScreen -v 0
-    ./pv_conf.sh -s UseShadow -v 1
-    ./pv_conf.sh -s AuthuiStyle -v 7
-
+    ${mkPvConfs settings}
     ./gen_blur.sh
 
     substituteInPlace PlymouthVista.plymouth \
