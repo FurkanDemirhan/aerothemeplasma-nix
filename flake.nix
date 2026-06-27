@@ -69,7 +69,7 @@
               owner = "aeroshell";
               repo = "atp/aerothemeplasma";
               rev = "713fbc2f0bb728b3f4e20aaf8d7eeae166fd39ba";
-              hash = "sha256-FAKE1HASHm41lGbR5o6ufakxez5zT2rbYqF/Sl0NXl8=";
+              hash = "sha256-JKUCMf0sJEstdrjYjt4yerKarcBMsg4is5pToDokkDg=";
             };
             
             libplasma = self.callPackage ./pkgs/aeroshell/hacks/libplasma.nix {};
