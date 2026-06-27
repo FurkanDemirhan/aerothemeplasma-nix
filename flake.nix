@@ -40,7 +40,7 @@
               owner = "aeroshell";
               repo = "aeroshell-kwin-components";
               rev = "148c3c2034feab345b93c12a3295c877faf46f87";
-              hash = "sha256-xAi+JphwwabYdrGC9T3DKNanCgGXxAFHVpgfwkkI8UI=";
+              hash = "sha256-Q6Pt55f9ZneGCskdmjrRobYtm04ggyhk95JlClWfyrM=";
             };
             aeroshell-smod-repo = pkgs.fetchFromGitLab {
               domain = "gitgud.io";
