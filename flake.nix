@@ -61,7 +61,7 @@
               owner = "aeroshell";
               repo = "atp/aerothemeplasma-icons";
               rev = "96950b8028a5d960cb683280fe5f1d9e33e6b8a2";
-              hash = "sha256-fakehashb58AwZZAyt7/0R1JTcJtamoocPjr31c8Nk4=";
+              hash = "sha256-7dfoGD3LQiBQ7/JeM1CwAZ+NNMaAJyAN/SaYIHZl1xg=";
             };
 
             aerothemeplasma-repo = pkgs.fetchFromGitLab {
