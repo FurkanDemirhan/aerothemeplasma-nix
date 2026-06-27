@@ -63,12 +63,16 @@
               rev = "b8d5ce100251b74a3a3c5b4a474cb3ff8df11bba";
               hash = "sha256-4GFn8wJ8b58AwZZAyt7/0R1JTcJtamoocPjr31c8Nk4=";
             };
-            aerothemeplasma-repo = pkgs.fetchFromGitLab {
-              domain = "gitgud.io";
-              owner = "aeroshell";
-              repo = "atp/aerothemeplasma";
-              rev = "d4ca559d1ff9f26dd6652df66ecc075aa14efdc2";
-              hash = "sha256-Ac8M1ZjWum41lGbR5o6uX69xez5zT2rbYqF/Sl0NXl8=";
+            # Updated to Plasma 6.7 base version (HEAD of Plasma/6.7 branch).
+            # Source switched to the aeroshell-desktop GitHub mirror because
+            # gitgud.io is now behind Cloudflare and refuses anonymous git
+            # clones for fetchFromGitLab. The GitHub mirror is kept in sync
+            # with the canonical gitgud.io/aeroshell/atp/aerothemeplasma repo.
+            aerothemeplasma-repo = pkgs.fetchFromGitHub {
+              owner = "aeroshell-desktop";
+              repo = "aerothemeplasma";
+              rev = "713fbc2f0bb728b3f4e20aaf8d7eeae166fd39ba";
+              hash = "sha256-EKjd/SRsO7NrNdCe5WVlU9RXcV1TKpg9/A683WITb8c=";
             };
             
             libplasma = self.callPackage ./pkgs/aeroshell/hacks/libplasma.nix {};
