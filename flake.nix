@@ -39,40 +39,37 @@
               domain = "gitgud.io";
               owner = "aeroshell";
               repo = "aeroshell-kwin-components";
-              rev = "b787cfe07b31374ddfd700034f9f7138e51382dc";
-              hash = "sha256-xAj+JphwwabYdrGC9T3DKNanCgGXxAFHVpgfwkkI8UI=";
+              rev = "148c3c2034feab345b93c12a3295c877faf46f87";
+              hash = "sha256-xAi+JphwwabYdrGC9T3DKNanCgGXxAFHVpgfwkkI8UI=";
             };
             aeroshell-smod-repo = pkgs.fetchFromGitLab {
               domain = "gitgud.io";
               owner = "aeroshell";
               repo = "smod";
-              rev = "bc04a7b9ecbb4a8f0a88e69c1b1e4fd4ed2f358d";
-              hash = "sha256-NXhiE5dzZoGKeGjLDch08OhtZvwpVH9SIy2fsKw2tC8=";
+              rev = "111d3e6554b68c72b64bf475f82eae6019d85c81";
+              hash = "sha256-sfakE5dzZoGKeGjLDch08OhtZvwpVH9SIy2fsKw2tC8=";
             };
             aeroshell-workspace-repo = pkgs.fetchFromGitLab {
               domain = "gitgud.io";
               owner = "aeroshell";
               repo = "aeroshell-workspace";
-              rev = "12313066fbeafb950ad9ac59d98fa4b16a33c85b";
-              hash = "sha256-JQ7Mx0XL8VnrAxtDaRu46EIXePHNQZy5hNN2GIS4m94=";
+              rev = "00a39ba08f3b9441b0883f1b82fc4e7e9e6a44b7";
+              hash = "sha256-fakex0XL8VnrAxtDaRu46EIXePHNQZy5hNN2GIS4m94=";
             };
             aerothemeplasma-icons-repo = pkgs.fetchFromGitLab {
               domain = "gitgud.io";
               owner = "aeroshell";
               repo = "atp/aerothemeplasma-icons";
-              rev = "b8d5ce100251b74a3a3c5b4a474cb3ff8df11bba";
-              hash = "sha256-4GFn8wJ8b58AwZZAyt7/0R1JTcJtamoocPjr31c8Nk4=";
+              rev = "96950b8028a5d960cb683280fe5f1d9e33e6b8a2";
+              hash = "sha256-fakehashb58AwZZAyt7/0R1JTcJtamoocPjr31c8Nk4=";
             };
-            # Updated to Plasma 6.7 base version (HEAD of Plasma/6.7 branch).
-            # Source switched to the aeroshell-desktop GitHub mirror because
-            # gitgud.io is now behind Cloudflare and refuses anonymous git
-            # clones for fetchFromGitLab. The GitHub mirror is kept in sync
-            # with the canonical gitgud.io/aeroshell/atp/aerothemeplasma repo.
-            aerothemeplasma-repo = pkgs.fetchFromGitHub {
-              owner = "aeroshell-desktop";
-              repo = "aerothemeplasma";
+
+            aerothemeplasma-repo = pkgs.fetchFromGitLab {
+              domain = "gitgud.io";
+              owner = "aeroshell";
+              repo = "atp/aerothemeplasma";
               rev = "713fbc2f0bb728b3f4e20aaf8d7eeae166fd39ba";
-              hash = "sha256-EKjd/SRsO7NrNdCe5WVlU9RXcV1TKpg9/A683WITb8c=";
+              hash = "sha256-FAKE1HASHm41lGbR5o6ufakxez5zT2rbYqF/Sl0NXl8=";
             };
             
             libplasma = self.callPackage ./pkgs/aeroshell/hacks/libplasma.nix {};
