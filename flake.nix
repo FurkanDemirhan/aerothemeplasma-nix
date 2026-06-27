@@ -54,7 +54,7 @@
               owner = "aeroshell";
               repo = "aeroshell-workspace";
               rev = "00a39ba08f3b9441b0883f1b82fc4e7e9e6a44b7";
-              hash = "sha256-fakex0XL8VnrAxtDaRu46EIXePHNQZy5hNN2GIS4m94=";
+              hash = "sha256-UGT+MaFwSgLzacdwZTLhaxW5qhaSVa6ZFE6F4XCaHbE=";
             };
             aerothemeplasma-icons-repo = pkgs.fetchFromGitLab {
               domain = "gitgud.io";
