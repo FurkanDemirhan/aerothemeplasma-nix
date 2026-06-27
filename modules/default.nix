@@ -2,6 +2,7 @@ perSystem:
 { config, lib, pkgs, ... }:
 let
   cfg = config.programs.aeroshell;
+  pvcfg = if cfg.aerothemeplasma.plymouth.enable then cfg.aerothemeplasma.plymouth else cfg.vistathemeplasma.plymouth;
   atpkgs = perSystem.config.packages;
   withSessions = list: lib.concatMap (pkg:
     lib.optional cfg.sessions.wayland.enable (pkg.override { session = "wayland"; })
@@ -23,8 +24,8 @@ in
   options.programs.sevulet.enable = lib.mkEnableOption "nothing";
   
   options.programs = {
-    aeroshell = {
-      enable = lib.mkEnableOption "AeroShell, a set of core components for AeroThemePlasma";
+    aeroshell = rec {
+      enable = lib.mkEnableOption "AeroShell";
       polkit.enable = lib.mkEnableOption "the AeroShell Polkit agent replacement";
       fonts = {
         enable = lib.mkEnableOption "the Segoe UI and Lucida Console fonts";
@@ -38,7 +39,21 @@ in
       aerothemeplasma = {
         enable = lib.mkEnableOption "AeroThemePlasma, a set of Plasma theme packages";
         plymouth.enable = lib.mkEnableOption "the PlymouthVista theme using the 7 style";
+        plymouth.settings = lib.mkOption {
+          type = lib.types.submodule {
+            freeformType = with lib.types; attrsOf (oneOf [ str bool int ]);
+            options.BootSlowdown = lib.mkOption {
+              type = lib.types.int;
+              default = 0;
+              description = "Minimum duration of the PlymouthVista animation in seconds.";
+            };
+          };
+        };
         sddm.enable = lib.mkEnableOption "the SDDM theme";
+      };
+      vistathemeplasma = {
+        plymouth.enable = lib.mkEnableOption "the PlymouthVista theme using the Vista style";
+        plymouth.settings = aerothemeplasma.plymouth.settings;
       };
     };
 
@@ -85,15 +100,24 @@ in
           Enable it like so: "services.xserver.enable = true;"
         '';
       }
+      {
+        assertion = !(cfg.aerothemeplasma.plymouth.enable && cfg.vistathemeplasma.plymouth.enable);
+        message = "Both Plymouth styles under programs.aeroshell are enabled. Choose one.";
+      }
     ];
 
     services.displayManager.sessionPackages = lib.mkIf cfg.aerothemeplasma.enable (withSessions [ atpkgs.login-session ]);
     
     environment.systemPackages = with atpkgs; [
-      pkgs.kdePackages.qtmultimedia kcmloader
-      libplasma libtaskmanager libshowdesktop
-      libaeroshellutils plasma-workspace default-rules
-    ] ++ (with atpkgs; lib.optionals cfg.aerothemeplasma.enable [
+      pkgs.kdePackages.qtmultimedia libplasma plasma-workspace
+
+      dimscreenaero fadingpopupsaero flip3d i18n-kwin loginaero smod 
+      smodpeekeffect smodpeekscript squashaero thumbnail-aero thumbnails
+
+      kcmloader libaeroshellutils libshowdesktop libtaskmanager
+    ] ++ withSessions (with atpkgs; [
+      aeroglassblur aeroglide launchfeedback smodglow smodsnap
+    ]) ++ (with atpkgs; lib.optionals cfg.aerothemeplasma.enable [
       cursors icons sounds
 
       atpootb authui7 color-scheme kvantum-windows7aero
@@ -103,13 +127,8 @@ in
       networkmanagement notifications panel sevenstart seventasks
       systemtray volume win7showdesktop
 
-      dimscreenaero fadingpopupsaero flip3d i18n-kwin loginaero smod 
-      smodpeekeffect smodpeekscript squashaero thumbnail-aero thumbnails
-
       pkgs.kdePackages.qtstyleplugin-kvantum
-    ] ++ withSessions (with atpkgs; [
-      aeroglassblur aeroglide launchfeedback smodglow smodsnap 
-    ])) 
+    ]) 
       ++ lib.optionals cfg.aerothemeplasma.sddm.enable [ atpkgs.sddm-theme-mod ]
       ++ lib.optionals config.programs.linver.enable [ atpkgs.linver ]
       ++ lib.optionals config.programs.execbin.enable [ atpkgs.execbin ];
@@ -127,9 +146,26 @@ in
       uac-polkit-agent
     ];
 
-    boot.plymouth = lib.mkIf cfg.aerothemeplasma.plymouth.enable {
+    boot.plymouth = lib.mkIf pvcfg.enable {
       theme = "PlymouthVista";
-      themePackages = [ atpkgs.plymouthvista ];
+      themePackages = [( atpkgs.plymouthvista.override { settings = pvcfg.settings; } )];
+    };
+    # https://github.com/furkrn/PlymouthVista/blob/cc6592a29387462d003c2c95cb9cb5df3fea851f/systemd/slowdown/plymouth-vista-slow-boot-animation.service
+    # https://wiki.archlinux.org/title/Plymouth#Slow_down_boot_to_show_the_full_animation
+    systemd.services.plymouth-vista-slow-boot-animation = lib.mkIf (pvcfg.settings.BootSlowdown > 0) {
+      description = "Waits for Plymouth animation to finish";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "plymouth-start.service" ];
+      before = [ "plymouth-quit.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${lib.getExe' pkgs.coreutils "sleep"} ${lib.toString pvcfg.settings.BootSlowdown}";
+      };
+    };
+    programs.aeroshell.aerothemeplasma.plymouth.settings = {
+      AuthuiStyle = "7";
+      UseLegacyBootScreen = false;
+      UseShadow = lib.mkDefault true;
     };
 
     services.displayManager.sddm = lib.mkIf cfg.aerothemeplasma.sddm.enable {

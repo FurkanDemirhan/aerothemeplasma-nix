@@ -60,7 +60,7 @@ programs.aeroshell = {
 #### Disabling sessions
 If you have the X server enabled (`services.xserver.enable = true;`), some effects will compile for both Wayland and X11 by default. If you know you will only use one with the theme, you can save yourself time by disabling the other: `programs.aeroshell.sessions.<wayland/x11>.enable = false;`.
 
-Please remember that [KDE is dropping their X11 session in Plasma 6.8](https://blogs.kde.org/2025/11/26/going-all-in-on-a-wayland-future) which will release [around mid-October 2026](https://community.kde.org/Schedules/Plasma_6#Future_releases), and the AeroShell developers have stated on Discord that they intend to drop all X11 support then.
+Please remember that [KDE is dropping their X11 session in Plasma 6.8](https://blogs.kde.org/2025/11/26/going-all-in-on-a-wayland-future) which will release [around mid-October 2026](https://community.kde.org/Schedules/Plasma_6#Future_releases), and the AeroShell developers [have stated](https://wackyideas.neocities.org/blogposts/2026/03/01/aerothemeplasma-new-version#wayland) that they intend to drop all X11 support then.
 
 #### Lucida Console font
 If you use full disk encryption, Plymouth shows a password screen [(though NixOS doesn't support that by default)](https://github.com/NixOS/nixpkgs/issues/26722#issuecomment-1693500074). The Lucida Console font is used for the screen, which can be enabled with `programs.aeroshell.fonts.lucida.enable = true;` but you must obtain a copy from Windows 7 yourself.

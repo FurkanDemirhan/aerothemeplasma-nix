@@ -6,7 +6,6 @@ A NixOS host is not required to contribute. Arch Linux instructions are also ava
 * Nix package manager or NixOS
 * Up to ~4GB download and ~12GB of storage space at worst
 * 4 CPU cores and 4096MB RAM for the VM, which [can be edited](vms/aerothemeplasma.nix)
-* [Font files](README.md#fonts) from an [up-to-date](https://github.com/nyakase/aerothemeplasma-nix/issues/15#issuecomment-3941785456) Windows® 7 install if testing Plymouth
 * x86-64 host capable of [mesa hardware acceleration](https://docs.mesa3d.org/faq.html#rendering-is-slow-why-isn-t-my-graphics-hardware-being-used)
 * virt-viewer as the [SPICE](https://spice-space.org) client
 
